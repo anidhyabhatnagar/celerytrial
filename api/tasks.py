@@ -6,13 +6,13 @@ from features.stats import Stats
 app = Celery('tasks', broker='amqp://localhost', backend='mongodb://localhost:27017/celerytrial')
 
 
-@app.task
+@app.task(queue="reverse")
 def text_reverse(text):
     sleep(25)
     return text[::-1]
 
 
-@app.task()
+@app.task(queue="celery")
 def get_stats(text):
     stat = Stats(text)
     char_count = stat.char_count()
