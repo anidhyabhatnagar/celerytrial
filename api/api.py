@@ -1,7 +1,6 @@
 from flask import Flask, request, jsonify
 from tasks import get_stats
 from tasks import text_reverse
-from reverse_task import text_reverse
 from db.db_connection import DBConnection
 from db.db_api_operation import DBAPIOperations
 

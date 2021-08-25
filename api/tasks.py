@@ -6,9 +6,19 @@ from features.stats import Stats
 app = Celery('tasks', broker='amqp://localhost', backend='mongodb://localhost:27017/celerytrial')
 
 
-@app.task(queue="reverse")
-def text_reverse(text):
-    sleep(25)
+@app.task(
+    bind=True,
+    queue="reverse",
+    max_retries=2
+)
+def text_reverse(self, text):
+    try:
+        sleep(5)
+        if text == "Retry Test":
+            raise Exception("Failed Task")
+    except Exception as e:
+        print("Caught Exception: {}. Retrying the task.".format(e))
+        self.retry()
     return text[::-1]
 
 
